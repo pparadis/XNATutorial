@@ -36,6 +36,15 @@ namespace XNATutorial
         private float playerScaling;
         private int currentPlayer = 0;
         private SpriteFont font;
+        private Texture2D rocketTexture;
+
+        private bool rocketFlying = false;
+
+        private Vector2 rocketPosition;
+        private Vector2 rocketDirection;
+        private float rocketAngle;
+        private float rocketScaling = 0.1f;
+
 
         public Game1()
         {
@@ -95,6 +104,8 @@ namespace XNATutorial
             cannonTexture = Content.Load<Texture2D>("cannon");
 
             font = Content.Load<SpriteFont>("myFont");
+
+            rocketTexture = Content.Load<Texture2D>("rocket");
 
             screenWidth = device.PresentationParameters.BackBufferWidth;
             screenHeight = device.PresentationParameters.BackBufferHeight;
@@ -172,6 +183,20 @@ namespace XNATutorial
             {
                 players[currentPlayer].Power = 0;
             }
+
+            if(keyboardState.IsKeyDown(Keys.Enter) || keyboardState.IsKeyDown(Keys.Space))
+            {
+                rocketFlying = true;
+
+                rocketPosition = players[currentPlayer].Position;
+                rocketPosition.X += 20;
+                rocketPosition.Y -= 10;
+                rocketAngle = players[currentPlayer].Angle;
+                Vector2 up = new Vector2(0, -1);
+                Matrix rotMatrix = Matrix.CreateRotationZ(rocketAngle);
+                rocketDirection = Vector2.Transform(up, rotMatrix);
+                rocketDirection *= players[currentPlayer].Power/50.0f;
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -182,6 +207,7 @@ namespace XNATutorial
             DrawScenery();
             DrawPlayers();
             DrawText();
+            DrawRocket();
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -215,6 +241,14 @@ namespace XNATutorial
             var currentAngle = (int) MathHelper.ToDegrees(player.Angle);
             spriteBatch.DrawString(font, "Cannon angle: " + currentAngle, new Vector2(20, 20), player.Color);
             spriteBatch.DrawString(font, "Cannon power: " + player.Power, new Vector2(20, 45), player.Color);
+        }
+
+        private void DrawRocket()
+        {
+            if(rocketFlying)
+            {
+                spriteBatch.Draw(rocketTexture, rocketPosition, null,players[currentPlayer].Color, rocketAngle, new Vector2(42, 240), rocketScaling, SpriteEffects.None, 1 );
+            }
         }
     }
 }
