@@ -33,6 +33,7 @@ namespace XNATutorial
         private int screenHeight;
         PlayerData[] players;
         int numberOfPlayers = 4;
+        private float playerScaling;
 
         public Game1()
         {
@@ -95,6 +96,8 @@ namespace XNATutorial
             screenHeight = device.PresentationParameters.BackBufferHeight;
 
             SetUpPlayers();
+
+            playerScaling = 40.0f/(float) carriageTexture.Width;
         }
 
         protected override void UnloadContent()
@@ -136,7 +139,7 @@ namespace XNATutorial
             {
                 if (player.IsAlive)
                 {
-                    spriteBatch.Draw(carriageTexture, player.Position, Color.White);
+                    spriteBatch.Draw(carriageTexture, player.Position, null, player.Color, 0, new Vector2(0, carriageTexture.Height), playerScaling, SpriteEffects.None, 0);
                 }
             }
         }
