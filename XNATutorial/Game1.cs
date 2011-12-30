@@ -35,6 +35,7 @@ namespace XNATutorial
         int numberOfPlayers = 4;
         private float playerScaling;
         private int currentPlayer = 0;
+        private SpriteFont font;
 
         public Game1()
         {
@@ -93,12 +94,14 @@ namespace XNATutorial
             carriageTexture = Content.Load<Texture2D>("carriage");
             cannonTexture = Content.Load<Texture2D>("cannon");
 
+            font = Content.Load<SpriteFont>("myFont");
+
             screenWidth = device.PresentationParameters.BackBufferWidth;
             screenHeight = device.PresentationParameters.BackBufferHeight;
 
             SetUpPlayers();
 
-            playerScaling = 40.0f/(float) carriageTexture.Width;
+            playerScaling = 40.0f/carriageTexture.Width;
         }
 
         protected override void UnloadContent()
@@ -178,6 +181,7 @@ namespace XNATutorial
             spriteBatch.Begin();
             DrawScenery();
             DrawPlayers();
+            DrawText();
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -203,6 +207,14 @@ namespace XNATutorial
                     spriteBatch.Draw(carriageTexture, player.Position, null, player.Color, 0, new Vector2(0, carriageTexture.Height), playerScaling, SpriteEffects.None, 0);
                 }
             }
+        }
+
+        private void DrawText()
+        {
+            var player = players[currentPlayer];
+            var currentAngle = (int) MathHelper.ToDegrees(player.Angle);
+            spriteBatch.DrawString(font, "Cannon angle: " + currentAngle, new Vector2(20, 20), player.Color);
+            spriteBatch.DrawString(font, "Cannon power: " + player.Power, new Vector2(20, 45), player.Color);
         }
     }
 }
