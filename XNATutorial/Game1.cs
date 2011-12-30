@@ -139,6 +139,10 @@ namespace XNATutorial
             {
                 if (player.IsAlive)
                 {
+                    var xPos = (int) player.Position.X;
+                    var yPos = (int) player.Position.Y;
+                    var cannonOrigin = new Vector2(11,50);
+                    spriteBatch.Draw(cannonTexture,new Vector2(xPos+20, yPos - 10), null, player.Color, MathHelper.ToRadians(player.Angle), cannonOrigin,playerScaling,SpriteEffects.None,1);
                     spriteBatch.Draw(carriageTexture, player.Position, null, player.Color, 0, new Vector2(0, carriageTexture.Height), playerScaling, SpriteEffects.None, 0);
                 }
             }
