@@ -34,6 +34,7 @@ namespace XNATutorial
         PlayerData[] players;
         int numberOfPlayers = 4;
         private float playerScaling;
+        private int currentPlayer = 0;
 
         public Game1()
         {
@@ -106,12 +107,68 @@ namespace XNATutorial
 
         protected override void Update(GameTime gameTime)
         {
+            ProcessKeyboard();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
             {
                 Exit();
             }
 
             base.Update(gameTime);
+        }
+
+        private void ProcessKeyboard()
+        {
+            var keyboardState = Keyboard.GetState();
+            if(keyboardState.IsKeyDown(Keys.Left))
+            {
+                players[currentPlayer].Angle -= 0.01f;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.Right))
+            {
+                players[currentPlayer].Angle += 0.01f;
+            }
+
+            if(players[currentPlayer].Angle > MathHelper.PiOver2)
+            {
+                players[currentPlayer].Angle = -MathHelper.PiOver2;
+            }
+
+            if (players[currentPlayer].Angle < -MathHelper.PiOver2)
+            {
+                players[currentPlayer].Angle = MathHelper.PiOver2;
+            }
+
+            if(keyboardState.IsKeyDown(Keys.Down))
+            {
+                players[currentPlayer].Power -= 1;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.Up))
+            {
+                players[currentPlayer].Power += 1;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.PageDown))
+            {
+                players[currentPlayer].Power -= 20;
+            }
+
+            if (keyboardState.IsKeyDown(Keys.PageUp))
+            {
+                players[currentPlayer].Power += 20;
+            }
+
+            if(players[currentPlayer].Power > 1000)
+            {
+                players[currentPlayer].Power = 1000;
+            }
+
+            if (players[currentPlayer].Power < 0)
+            {
+                players[currentPlayer].Power = 0;
+            }
         }
 
         protected override void Draw(GameTime gameTime)
@@ -142,7 +199,7 @@ namespace XNATutorial
                     var xPos = (int) player.Position.X;
                     var yPos = (int) player.Position.Y;
                     var cannonOrigin = new Vector2(11,50);
-                    spriteBatch.Draw(cannonTexture,new Vector2(xPos+20, yPos - 10), null, player.Color, MathHelper.ToRadians(player.Angle), cannonOrigin,playerScaling,SpriteEffects.None,1);
+                    spriteBatch.Draw(cannonTexture,new Vector2(xPos+20, yPos - 10), null, player.Color, player.Angle, cannonOrigin,playerScaling,SpriteEffects.None,1);
                     spriteBatch.Draw(carriageTexture, player.Position, null, player.Color, 0, new Vector2(0, carriageTexture.Height), playerScaling, SpriteEffects.None, 0);
                 }
             }
