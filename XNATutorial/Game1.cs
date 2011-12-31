@@ -190,7 +190,7 @@ namespace XNATutorial
 
                 rocketPosition = players[currentPlayer].Position;
                 rocketPosition.X += 20;
-                rocketPosition.Y -= 10;
+                rocketPosition.Y -=10;
                 rocketAngle = players[currentPlayer].Angle;
                 Vector2 up = new Vector2(0, -1);
                 Matrix rotMatrix = Matrix.CreateRotationZ(rocketAngle);
